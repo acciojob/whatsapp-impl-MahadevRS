@@ -60,7 +60,7 @@ public class WhatsappRepository {
 
     public int sendMessage(Message message, User sender, Group group) throws Exception{
         int n=0;
-        if(!(adminMap.containsKey(group))){
+        if(!(groupUserMap.containsKey(group))){
             throw new Exception("Group does not exist");
         }
         else if(!(adminMap.get(group).equals(sender))){
@@ -77,8 +77,19 @@ public class WhatsappRepository {
     }
 
     public String changeAdmin(User approver, User user, Group group) throws Exception{
-
-        return "";
+        if(!(groupUserMap.containsKey(group))){
+            throw new Exception("Group does not exist");
+        }
+        else if(!(adminMap.get(group).equals(approver))){
+            throw new Exception("Approver does not have rights");
+        }
+        else if(!(groupUserMap.get(group).contains(user))){
+            throw new Exception("User is not a participant");
+        }
+        else{
+            adminMap.put(group,user);
+            return "SUCCESS";
+        }
     }
 
     public int removeUser(User user) throws Exception{
